@@ -81,16 +81,89 @@ If Oracle is running on another machine, replace `localhost` with that database 
 
 Never commit real credentials to GitHub.
 
-### 3️⃣ Install the runtime
+### 3️⃣ Install the dependencies
 
-Install:
-- JDK 8 or newer
-- Apache Tomcat 9 or newer
-- Oracle XE or another Oracle Database
-- Eclipse Enterprise Java / IntelliJ IDEA
-- A compatible Oracle JDBC driver such as ojdbc8/ojdbc11 for your JDK
+You need the following components before running eLibrary:
 
-The obsolete `ojdbc14.jar` has been removed from the repository. Add a current compatible Oracle JDBC driver to `WebContent/WEB-INF/lib/`.
+| Dependency | Required? | Purpose |
+|---|---|---|
+| **JDK 8+** | ✅ Yes | Compile and run the Java application |
+| **Apache Tomcat 9+** | ✅ Yes | Runs the Servlet web application |
+| **Oracle Database / Oracle XE** | ✅ Yes | Stores books, librarians and issue records |
+| **Oracle JDBC Driver** | ✅ Yes | Connects Java to Oracle |
+| **Eclipse Enterprise Java / IntelliJ IDEA** | ⚪ Optional | Recommended for easier development |
+
+#### ☕ 3.1 Install Java JDK
+
+Install **JDK 8 or newer** and verify it:
+
+```bash
+java -version
+javac -version
+```
+
+Both commands should return a Java version.
+
+#### 🐱 3.2 Install Apache Tomcat
+
+Install **Apache Tomcat 9 or newer**.
+
+After installation, verify that Tomcat can start successfully. The default web port is usually:
+
+```text
+8080
+```
+
+You can change this later in Tomcat's `server.xml`.
+
+#### 🗄️ 3.3 Install Oracle Database
+
+Install **Oracle XE** for a simple local setup, or use another compatible Oracle Database instance.
+
+After Oracle is running:
+
+1. Create the `elibrary` database user from the previous step.
+2. Run `WebContent/tablesoracle.sql` using that user.
+3. Make sure the database host, port and service name match `ELIBRARY_DB_URL`.
+
+#### 🔌 3.4 Install the Oracle JDBC driver
+
+The application requires an Oracle JDBC driver because Java connects to Oracle through JDBC.
+
+The old `ojdbc14.jar` is intentionally **not included** in this repository.
+
+Download a current Oracle JDBC driver compatible with your JDK, such as:
+
+- `ojdbc8.jar` for Java 8-compatible environments
+- `ojdbc11.jar` for Java 11+ environments
+
+Then copy the JAR into:
+
+```text
+WebContent/WEB-INF/lib/
+```
+
+Your project should look similar to:
+
+```text
+Elibrary/
+└── WebContent/
+    └── WEB-INF/
+        └── lib/
+            └── ojdbc8.jar
+```
+
+> **Important:** Do not commit the JDBC driver to Git if your organization's or Oracle's distribution terms do not permit it. For local development, place the JAR in the project as described above.
+
+#### 🧰 3.5 IDE (optional)
+
+You can use **Eclipse Enterprise Java** or **IntelliJ IDEA** to work with the project.
+
+The IDE is not the application runtime. The important runtime pieces are:
+
+```text
+JDK + Tomcat + Oracle + Oracle JDBC Driver
+```
 
 ### 4️⃣ Deploy with Tomcat
 
