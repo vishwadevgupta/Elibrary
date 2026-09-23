@@ -1,20 +1,3 @@
 package com.javatpoint.servlets;
-
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.javatpoint.dao.LibrarianDao;
-@WebServlet("/DeleteLibrarian")
-public class DeleteLibrarian extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String sid=request.getParameter("id");
-		int id=Integer.parseInt(sid);
-		LibrarianDao.delete(id);
-		response.sendRedirect("ViewLibrarian");
-	}
-}
+import java.io.IOException;import javax.servlet.*;import javax.servlet.annotation.*;import javax.servlet.http.*;import com.javatpoint.dao.LibrarianDao;import com.javatpoint.util.AuthUtil;
+@WebServlet("/DeleteLibrarian") public class DeleteLibrarian extends HttpServlet{protected void doPost(HttpServletRequest q,HttpServletResponse r)throws ServletException,IOException{if(!AuthUtil.requireAdmin(q,r))return;try{LibrarianDao.delete(Integer.parseInt(q.getParameter("id")));r.sendRedirect("ViewLibrarian");}catch(NumberFormatException e){r.sendError(400,"Invalid librarian ID.");}}}
