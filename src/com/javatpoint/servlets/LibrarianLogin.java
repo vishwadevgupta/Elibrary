@@ -1,51 +1,9 @@
 package com.javatpoint.servlets;
-
-
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import com.javatpoint.dao.LibrarianDao;
-@WebServlet("/LibrarianLogin")
-public class LibrarianLogin extends HttpServlet {
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		PrintWriter out=response.getWriter();
-		
-		out.print("<!DOCTYPE html>");
-		out.print("<html>");
-		out.println("<head>");
-		out.println("<title>Librarian Section</title>");
-		out.println("<link rel='stylesheet' href='bootstrap.min.css'/>");
-		out.println("</head>");
-		out.println("<body>");
-		
-		String email=request.getParameter("email");
-		String password=request.getParameter("password");
-		if(LibrarianDao.authenticate(email, password)){
-			HttpSession session=request.getSession();
-			session.setAttribute("email",email);
-			
-			request.getRequestDispatcher("navlibrarian.html").include(request, response);
-			request.getRequestDispatcher("librariancarousel.html").include(request, response);
-			
-		}else{
-			request.getRequestDispatcher("navhome.html").include(request, response);
-			out.println("<div class='container'>");
-			out.println("<h3>Username or password error</h3>");
-			request.getRequestDispatcher("librarianloginform.html").include(request, response);
-			out.println("</div>");
-		}
-		
-		
-		request.getRequestDispatcher("footer.html").include(request, response);
-		out.close();
-	}
-
+import java.io.IOException;import javax.servlet.ServletException;import javax.servlet.annotation.WebServlet;import javax.servlet.http.*;import com.javatpoint.dao.LibrarianDao;
+@WebServlet("/LibrarianLogin") public class LibrarianLogin extends HttpServlet{
+ protected void doPost(HttpServletRequest req,HttpServletResponse res)throws ServletException,IOException{
+  String email=req.getParameter("email"),password=req.getParameter("password");
+  if(LibrarianDao.authenticate(email,password)){HttpSession old=req.getSession(false);if(old!=null)old.invalidate();HttpSession s=req.getSession(true);s.setAttribute("role","librarian");s.setAttribute("email",email.trim().toLowerCase());s.setMaxInactiveInterval(30*60);res.sendRedirect("ViewBook");}
+  else{res.setContentType("text/html;charset=UTF-8");res.getWriter().print("<link rel='stylesheet' href='app.css'><div class='page'><div class='card form-card'><h2>Sign in failed</h2><p class='muted'>The credentials were not accepted.</p><a class='btn btn-primary' href='index.html'>Try again</a></div></div>");}
+ }
 }
