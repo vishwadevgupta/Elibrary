@@ -1,0 +1,17 @@
+# Java / Eclipse
+build/
+bin/
+target/
+*.class
+.settings/
+.project
+.classpath
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Local secrets
+.env
+*.local
