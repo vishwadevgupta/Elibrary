@@ -1,30 +1,3 @@
 package com.javatpoint.servlets;
-
-
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.javatpoint.beans.LibrarianBean;
-import com.javatpoint.dao.LibrarianDao;
-@WebServlet("/EditLibrarian")
-public class EditLibrarian extends HttpServlet {
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String sid=request.getParameter("id");
-		int id=Integer.parseInt(sid);
-		String name=request.getParameter("name");
-		String email=request.getParameter("email");
-		String password=request.getParameter("password");
-		String smobile=request.getParameter("mobile");
-		long mobile=Long.parseLong(smobile);
-		LibrarianBean bean=new LibrarianBean(id,name, email, password, mobile);
-		LibrarianDao.update(bean);
-		response.sendRedirect("ViewLibrarian");
-	}
-
-}
+import java.io.IOException;import javax.servlet.*;import javax.servlet.annotation.*;import javax.servlet.http.*;import com.javatpoint.beans.LibrarianBean;import com.javatpoint.dao.LibrarianDao;import com.javatpoint.util.AuthUtil;
+@WebServlet("/EditLibrarian") public class EditLibrarian extends HttpServlet{protected void doPost(HttpServletRequest q,HttpServletResponse r)throws ServletException,IOException{if(!AuthUtil.requireAdmin(q,r))return;try{int id=Integer.parseInt(q.getParameter("id"));long mobile=Long.parseLong(q.getParameter("mobile"));String password=q.getParameter("password");LibrarianBean b=new LibrarianBean(id,q.getParameter("name"),q.getParameter("email"),password,mobile);if(LibrarianDao.update(b)>0)r.sendRedirect("ViewLibrarian");else r.sendError(400,"Unable to update librarian.");}catch(NumberFormatException e){r.sendError(400,"Invalid librarian ID or mobile.");}}}
