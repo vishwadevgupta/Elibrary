@@ -36,7 +36,7 @@ public class BookDao {
             String sql="select rowid from e_issuebook where callno=? and studentid=? and returnstatus='no' for update";
             String row=null;try(PreparedStatement p=c.prepareStatement(sql)){p.setString(1,callno.trim());p.setString(2,studentid.trim());try(ResultSet r=p.executeQuery()){if(r.next())row=r.getString(1);}}
             if(row==null){c.rollback();return 0;}
-            try(PreparedStatement p=c.prepareStatement("update e_issuebook set returnstatus='yes' where rowid=?")){p.setString(1,row);p.executeUpdate();}
+            try(PreparedStatement p=c.prepareStatement("update e_issuebook set returnstatus='yes' where rowid=CHARTOROWID(?)")){p.setString(1,row);p.executeUpdate();}
             try(PreparedStatement p=c.prepareStatement("update e_book set issued=case when issued>0 then issued-1 else 0 end where callno=?")){p.setString(1,callno.trim());p.executeUpdate();}
             c.commit();return 1;
         }catch(Exception e){System.err.println("Return failed: "+e.getMessage());return 0;}
