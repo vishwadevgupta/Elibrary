@@ -1,16 +1,3 @@
 package com.javatpoint.servlets;
-
-
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-@WebServlet("/LogoutLibrarian")
-public class LogoutLibrarian extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getSession().invalidate();
-		response.sendRedirect("index.html");
-	}
-}
+import java.io.IOException;import javax.servlet.*;import javax.servlet.annotation.*;import javax.servlet.http.*;
+@WebServlet("/LogoutLibrarian") public class LogoutAdmin extends HttpServlet{protected void doGet(HttpServletRequest q,HttpServletResponse r)throws ServletException,IOException{HttpSession s=q.getSession(false);if(s!=null)s.invalidate();r.sendRedirect("index.html");}}
