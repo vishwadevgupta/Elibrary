@@ -1,37 +1,3 @@
 package com.javatpoint.servlets;
-
-
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-@WebServlet("/AddLibrarianForm")
-public class AddLibrarianForm extends HttpServlet {
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		PrintWriter out=response.getWriter();
-		
-		out.print("<!DOCTYPE html>");
-		out.print("<html>");
-		out.println("<head>");
-		out.println("<title>Add Librarian Form</title>");
-		out.println("<link rel='stylesheet' href='bootstrap.min.css'/>");
-		out.println("</head>");
-		out.println("<body>");
-		
-		request.getRequestDispatcher("navadmin.html").include(request, response);
-		out.println("<div class='container'>");
-		request.getRequestDispatcher("addlibrarianform.html").include(request, response);
-		out.println("</div>");
-		
-		
-		
-		request.getRequestDispatcher("footer.html").include(request, response);
-		out.close();
-	}
-
-}
+import java.io.*;import javax.servlet.*;import javax.servlet.annotation.*;import javax.servlet.http.*;import com.javatpoint.util.AuthUtil;
+@WebServlet("/AddLibrarianForm") public class AddLibrarianForm extends HttpServlet{protected void doGet(HttpServletRequest q,HttpServletResponse r)throws ServletException,IOException{if(!AuthUtil.requireAdmin(q,r))return;r.setContentType("text/html;charset=UTF-8");PrintWriter o=r.getWriter();o.print("<!doctype html><html><head><meta name='viewport' content='width=device-width,initial-scale=1'><title>Add librarian | eLibrary</title><link rel='stylesheet' href='bootstrap.min.css'><link rel='stylesheet' href='app.css'></head><body>");q.getRequestDispatcher("navadmin.html").include(q,r);q.getRequestDispatcher("addlibrarianform.html").include(q,r);o.print("</body></html>");}}
